@@ -1,7 +1,6 @@
 package com.automotora.service.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.stereotype.Component;
 
 public class AutoRequest extends VehiculoRequest{
     private int puertas;

@@ -2,7 +2,6 @@ package com.automotora.service.dataaccess;
 
 import com.automotora.service.exceptions.DAOException;
 import com.automotora.service.model.Vehiculo;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;

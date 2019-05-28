@@ -2,16 +2,16 @@ package com.automotora.service.dataaccess.impl;
 
 import com.automotora.service.dataaccess.IVehiculoDAO;
 import com.automotora.service.exceptions.DAOException;
-import com.automotora.service.exceptions.DuplicateEntryException;
 import com.automotora.service.model.Auto;
 import com.automotora.service.model.KeyVehiculo;
 import com.automotora.service.model.Moto;
 import com.automotora.service.model.Vehiculo;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 
 @Repository("vehiculo")
@@ -46,9 +46,6 @@ public class VehiculoDAO implements IVehiculoDAO {
     @Override
     public void insert(Vehiculo vehiculo) throws DAOException {
         initBD();
-        if (exists(vehiculo.getMarca(),vehiculo.getModelo())){
-            throw new DuplicateEntryException("Ya existe el vehiculo");
-        }
         vehiculos.put(new KeyVehiculo(vehiculo),vehiculo);
     }
 

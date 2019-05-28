@@ -7,14 +7,11 @@ import com.automotora.service.requests.AutoRequest;
 import com.automotora.service.requests.MotoRequest;
 import com.automotora.service.responses.VehiculoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.POST;
 import java.util.List;
 
 @RestController

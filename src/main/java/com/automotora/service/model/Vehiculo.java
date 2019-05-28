@@ -30,6 +30,27 @@ public abstract class Vehiculo {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + getMarca().hashCode();
+        result = prime * result + getModelo().hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof KeyVehiculo)){
+            return false;
+        }
+        KeyVehiculo key = (KeyVehiculo)obj;
+        if (key.getMarca().equals(marca) && key.getModelo().equals(modelo)){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "Vehiculo{" +
                 "model='" + modelo + '\'' +
