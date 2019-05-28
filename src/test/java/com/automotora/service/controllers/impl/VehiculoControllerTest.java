@@ -233,8 +233,6 @@ public class VehiculoControllerTest {
                 }else{
                     controller.agregarAuto(String.format("AutoPrueba %d",i),String.format("Auto %d",i),4);
                     agregarAutoSimulado(String.format("AutoPrueba %d",i),String.format("Auto %d",i),4);
-                    BDDMockito.when(mockVehiculoDAO.exists(String.format("AutoPrueba %d",i),String.format("Auto %d",i)))
-                            .thenReturn(true);
                 }
             }
             //Ahora chequeo uno por uno que hayan llegado correctamente a la capa de datos.
