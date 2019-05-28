@@ -27,7 +27,7 @@ public class Auto extends Vehiculo{
 
     @Override
     public VehiculoResponse getResponse(){
-        return new AutoResponse(getMarca(),getModelo(),puertas);
+        return new AutoResponse(getMarca(),getModelo(),puertas,getDescripcion());
     }
 
     @Override

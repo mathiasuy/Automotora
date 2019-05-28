@@ -6,10 +6,12 @@ public abstract class VehiculoResponse {
     private String marca;
     private String modelo;
     private String info;
+    private String descripcion;
 
-    public VehiculoResponse(String marca, String modelo) {
+    public VehiculoResponse(String marca, String modelo, String descripcion) {
         this.marca = marca;
         this.modelo = modelo;
+        this.descripcion = descripcion;
     }
 
     public void setInfo(String info){
@@ -29,6 +31,11 @@ public abstract class VehiculoResponse {
     @JsonProperty("model")
     public String getModelo() {
             return modelo;
+    }
+
+    @JsonProperty("descripcion")
+    public String getDescripcion(){
+        return descripcion;
     }
 
     @Override

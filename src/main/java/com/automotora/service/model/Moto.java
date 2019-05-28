@@ -17,6 +17,6 @@ public class Moto extends Vehiculo{
 
     @Override
     public VehiculoResponse getResponse() {
-        return new MotoResponse(getMarca(),getModelo());
+        return new MotoResponse(getMarca(),getModelo(),getDescripcion());
     }
 }

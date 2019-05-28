@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AutoResponse extends VehiculoResponse{
     private int puertas;
 
-    public AutoResponse(String marca, String modelo, int puertas) {
-        super(marca, modelo);
+    public AutoResponse(String marca, String modelo, int puertas, String descripcion) {
+        super(marca, modelo, descripcion);
         this.puertas = puertas;
     }
 

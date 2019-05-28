@@ -115,6 +115,7 @@ public class VehiculoDAO implements IVehiculoDAO {
                 .filter(x ->
                         x.getMarca().contains(criterio)
                                 ||x.getModelo().contains(criterio)
+                                ||x.getDescripcion().contains(criterio)
                                 || (x instanceof Auto?String.valueOf(((Auto) x).getPuertas()).contains(criterio):false)
                 ).collect(Collectors.toList()));
         retorno.sort(Comparator.comparing(Vehiculo::getMarca));

@@ -52,12 +52,6 @@ public class RestVehiculoController {
             controller.modificar(vehiculo);
     }
 
-    @GetMapping("borrar/{marca}/{modelo}")
-    void modificarMoto(@PathVariable("marca") String marca,
-                        @PathVariable("modelo") String modelo) throws ControllerException{
-        controller.borrarVehiculo(marca,modelo);
-    }
-
     @GetMapping("vehiculos/{marca}/{modelo}")
     VehiculoResponse getVehiculo(@PathVariable("marca") String marca ,
                                  @PathVariable("modelo") String modelo) throws ControllerException{
