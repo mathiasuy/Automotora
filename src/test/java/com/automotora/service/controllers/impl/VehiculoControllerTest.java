@@ -87,10 +87,13 @@ public class VehiculoControllerTest {
             vehiculosPersistidos.put(new KeyVehiculo(vehiculo),vehiculo);
             //Mocks:
             BDDMockito.when(mockVehiculoDAO.list()).thenReturn(new ArrayList<>(vehiculosPersistidos.values()));
+
             BDDMockito.when(mockVehiculoDAO.getVehiculo(vehiculo.getMarca(),vehiculo.getModelo()))
                     .thenReturn(Optional.ofNullable(vehiculosPersistidos.get(vehiculo)));
+
             BDDMockito.when(mockVehiculoDAO.exists(vehiculo.getMarca(),vehiculo.getModelo()))
                     .thenReturn(true);
+
         } catch (DAOException e) {
             fail("Ocurrió una excepción indebida");
         }
@@ -98,7 +101,7 @@ public class VehiculoControllerTest {
 
     private void modificarVehiculoSimulado(Vehiculo vehiculo){
         //También actualizo los otros métodos para obtener y listar
-        try {
+//        try {
             //Esta es un control local para facilitar:
             Vehiculo encontrado = vehiculosPersistidos.put(new KeyVehiculo(vehiculo),vehiculo);
             encontrado.setDescripcion(vehiculo.getDescripcion());
@@ -106,14 +109,12 @@ public class VehiculoControllerTest {
                 ((Auto) encontrado).setPuertas(((Auto)vehiculo).getPuertas());
             }
             //Mocks:
-            BDDMockito.when(mockVehiculoDAO.list()).thenReturn(new ArrayList<>(vehiculosPersistidos.values()));
-            BDDMockito.when(mockVehiculoDAO.getVehiculo(vehiculo.getMarca(),vehiculo.getModelo()))
-                    .thenReturn(Optional.ofNullable(vehiculosPersistidos.get(vehiculo)));
-            BDDMockito.when(mockVehiculoDAO.exists(vehiculo.getMarca(),vehiculo.getModelo()))
-                    .thenReturn(true);
-        } catch (DAOException e) {
-            fail("Ocurrió una excepción indebida");
-        }
+//            BDDMockito.when(mockVehiculoDAO.list()).thenReturn(new ArrayList<>(vehiculosPersistidos.values()));
+//            BDDMockito.when(mockVehiculoDAO.getVehiculo(vehiculo.getMarca(),vehiculo.getModelo()))
+//                    .thenReturn(Optional.ofNullable(vehiculosPersistidos.get(vehiculo)));
+//        } catch (DAOException e) {
+//            fail("Ocurrió una excepción indebida");
+//        }
     }
 
     /**
@@ -130,9 +131,9 @@ public class VehiculoControllerTest {
             //Mocks:
             BDDMockito.when(mockVehiculoDAO.list()).thenReturn(new ArrayList<>(vehiculosPersistidos.values()));
             //Uso lenient para evitar excepcion de mockito y restaurar retornos de metodos
-            BDDMockito.lenient().when(mockVehiculoDAO.getVehiculo(marca,modelo))
+            BDDMockito.when(mockVehiculoDAO.getVehiculo(marca,modelo))
                     .thenReturn(Optional.ofNullable(null));
-            BDDMockito.lenient().when(mockVehiculoDAO.exists(marca,modelo))
+            BDDMockito.when(mockVehiculoDAO.exists(marca,modelo))
                     .thenReturn(false);
         } catch (DAOException e) {
             fail("Ocurrió una excepción indebida");
@@ -209,7 +210,7 @@ public class VehiculoControllerTest {
     @Test
     public void agregarMoto() {
         try {
-
+            //Notar que aca se hace en orden distinto a el método anterior, también funciona
             controller.agregarMoto("MotoPrueba1","Modelo");
             //El siguiente metodo actualiza el map local y los otros metodos del dao para mantener coherencia
             agregarMotoSimulada("MotoPrueba1","Modelo");
@@ -224,17 +225,23 @@ public class VehiculoControllerTest {
     /**
      * Otra forma que hace lo mismo que lo anterior
      *
-     * Nota: si se indica el parámetro de times(0) entonces se chequeará
-     * que no se ha llamado al método agregarAuto()
+     * Nota: si se indica como segundo parámetro en verify() times(0) entonces se chequeará
+     * que no se ha llamado al método agregarAuto(), si se indica un valor > 0 se
+     * obligará a comprobar que se realizaron varios inert y deberá ser exactamente
+     * igual a la cantidad de llamados a el insert. Si no se coloca, se asume 1 llamado solo (y solo 1)
      */
     @Test
     public void agregarAuto() {
         try {
             controller.agregarAuto("AutoPrueba1","Modelo",2);
             //El siguiente metodo actualiza el map local y los otros metodos del dao para mantener coherencia
+            //No debería afectar la prueba local de agregar auto si se quita
             agregarAutoSimulado("AutoPrueba1","Modelo",2);
+            //El siguiente método captura lo que llegó al método que accede al dao,
+            // esta es la línea relevante
             BDDMockito.verify(mockVehiculoDAO).insert(captor.capture());
-            Mockito.verify(mockVehiculoDAO,Mockito.times(1)).insert(captor.capture());
+            //Acá analizo lo capturado y lo comparo a ver si es lo mismo que llegó al controlador
+            // (o lo modificaría en base a lo requerido)
             assertEquals(captor.getValue().getMarca(),"AutoPrueba1");
         } catch (ControllerException e) {
             fail("Ocurrió una excepción indebida");
@@ -286,6 +293,9 @@ public class VehiculoControllerTest {
     }
 
 
+    /***
+     * Esta prueba sería como un "TopDown", prueba desde el rest hacia la capa de datos
+     */
     @Test
     public void borrarVehiculo() {
         try {
@@ -300,12 +310,11 @@ public class VehiculoControllerTest {
             int tamanioPrevio = controller.listarVehiculos().size();
             
             controller.borrarVehiculo("AutoPrueba 1","Auto 1");
-            quitarVehiculoSimulado("AutoPrueba 1","Auto 1");
+            BDDMockito.verify(mockVehiculoDAO).delete(captor.getValue().getMarca(),captor.getValue().getModelo());
 
-            //Ahora compruebo el tamaño de la lista retorno del controlador tras borrar
-            if (tamanioPrevio <= controller.listarVehiculos().size()){
-                fail("No se borró correctamente el elemento");
-            }
+            //la línea de abajo es en la que se comprueba lo que se pide en este test
+            assertEquals(captor.getValue().getMarca(), "AutoPrueba 1");
+            assertEquals(captor.getValue().getModelo(), "Auto 1");
         } catch (ControllerException e) {
             fail("Ocurrió una excepción indebida");
         }
@@ -371,6 +380,9 @@ public class VehiculoControllerTest {
      * Como el filtrado se hace directo en la capa DAO simulando una consulta con where like,
      * no es tarea del controlador el filtrado, por lo tanto la parte de filtrado de
      * el test de filtrado no aplica para esta capa. Solo se comprueba el pasaje al response
+     *
+     * Esta prueba vendría a ser como un Bottom Up (desde la capa de datos hasta la vista) a
+     * diferencia de las anteriores
      */
     @Test
     public void filtrado(){
@@ -387,6 +399,8 @@ public class VehiculoControllerTest {
                     ));
             List<VehiculoResponse> vehiculos = controller.buscarVehiculo("ba 1");
             //Chequeo la cantidad devuelta
+
+
             assertEquals(vehiculos.size(),4);
             //Chequeo lo devuelto
             AutoResponse auto = (AutoResponse) vehiculos.get(0);
@@ -403,7 +417,7 @@ public class VehiculoControllerTest {
             assertEquals(moto.getModelo(),"Modelo1");
             assertEquals(moto.getDescripcion(),"ba 1");
         } catch (ControllerException e) {
-            e.printStackTrace();
+            fail("Ocurrió una excepción indebida");
         }
     }
 
