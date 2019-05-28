@@ -3,6 +3,7 @@ package com.automotora.rest.controllers;
 import com.automotora.service.controllers.IVehiculoController;
 import com.automotora.service.exceptions.ControllerException;
 import com.automotora.service.filter.Filter;
+import com.automotora.service.model.Vehiculo;
 import com.automotora.service.requests.AutoRequest;
 import com.automotora.service.requests.MotoRequest;
 import com.automotora.service.responses.VehiculoResponse;
@@ -42,6 +43,17 @@ public class RestVehiculoController {
 
     @GetMapping("borrar/{marca}/{modelo}")
     void borrarVehiculo(@PathVariable("marca") String marca,
+                        @PathVariable("modelo") String modelo) throws ControllerException{
+        controller.borrarVehiculo(marca,modelo);
+    }
+
+    @GetMapping("modificar")
+    void modificarAuto(@RequestBody Vehiculo vehiculo) throws ControllerException{
+            controller.modificar(vehiculo);
+    }
+
+    @GetMapping("borrar/{marca}/{modelo}")
+    void modificarMoto(@PathVariable("marca") String marca,
                         @PathVariable("modelo") String modelo) throws ControllerException{
         controller.borrarVehiculo(marca,modelo);
     }

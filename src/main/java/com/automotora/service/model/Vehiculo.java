@@ -6,6 +6,7 @@ public abstract class Vehiculo {
 
     private String modelo;
     private String marca;
+    private String descripcion;
 
     public Vehiculo(String marca, String modelo) {
         this.modelo = modelo;
@@ -36,6 +37,14 @@ public abstract class Vehiculo {
         result = prime * result + getMarca().hashCode();
         result = prime * result + getModelo().hashCode();
         return result;
+    }
+
+    public String getDescripcion(){
+        return this.descripcion;
+    };
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override

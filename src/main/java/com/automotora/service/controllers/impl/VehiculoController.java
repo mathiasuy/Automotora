@@ -5,12 +5,12 @@ import com.automotora.service.dataaccess.IVehiculoDAO;
 import com.automotora.service.exceptions.ControllerException;
 import com.automotora.service.model.Auto;
 import com.automotora.service.model.Moto;
+import com.automotora.service.model.Vehiculo;
 import com.automotora.service.responses.VehiculoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.QueryParam;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +48,15 @@ public class VehiculoController implements IVehiculoController {
         }
         control(marca,modelo);
         vehiculoDAO.insert(new Auto(marca,modelo,puertas));
+    }
+
+    @Override
+    public void modificar(Vehiculo vehiculo) throws ControllerException {
+        control(vehiculo.getMarca(),vehiculo.getModelo());
+        if (!vehiculoDAO.exists(vehiculo.getMarca(),vehiculo.getModelo())){
+            throw new ControllerException("¡El vehículo no existe!");
+        }
+        vehiculoDAO.update(vehiculo);
     }
 
     @Override
