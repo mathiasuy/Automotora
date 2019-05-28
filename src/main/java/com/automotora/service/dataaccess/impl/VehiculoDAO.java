@@ -113,9 +113,9 @@ public class VehiculoDAO implements IVehiculoDAO {
         initBD();
         List<Vehiculo> retorno = new ArrayList<>(vehiculos.values().stream()
                 .filter(x ->
-                        x.getMarca().contains(criterio)
-                                ||x.getModelo().contains(criterio)
-                                ||x.getDescripcion().contains(criterio)
+                        x.getMarca().trim().toLowerCase().contains(criterio.trim().toLowerCase())
+                                ||x.getModelo().trim().toLowerCase().contains(criterio.trim().toLowerCase())
+                                ||x.getDescripcion().trim().toLowerCase().contains(criterio.trim().toLowerCase())
                                 || (x instanceof Auto?String.valueOf(((Auto) x).getPuertas()).contains(criterio):false)
                 ).collect(Collectors.toList()));
         retorno.sort(Comparator.comparing(Vehiculo::getMarca));

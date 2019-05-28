@@ -39,7 +39,6 @@ public class VehiculoControllerTest {
 
     private HashMap<KeyVehiculo,Vehiculo> vehiculosPersistidos = new HashMap<>();
 
-    int k =0;
     private int cantidadAInsertar = 2;
 
     @Before
@@ -380,22 +379,29 @@ public class VehiculoControllerTest {
             BDDMockito.when(mockVehiculoDAO.find("ba 1"))
                     .thenReturn(Arrays.asList(
                             new Auto("Prueba 1", "Modelo", 2),
-                            new Moto("Prueba 111", "Modelo"),
-                            new Moto("Prueba 11", "Modelo1")
+                            new Moto("Prue11", "Modba 1elo"),
+                            new Moto("Prueba 11", "Modelo1"),
+                            new Moto("Prueba 11", "Modelo1"){{
+                                setDescripcion("ba 1");
+                            }}
                     ));
             List<VehiculoResponse> vehiculos = controller.buscarVehiculo("ba 1");
             //Chequeo la cantidad devuelta
-            assertEquals(vehiculos.size(),3);
+            assertEquals(vehiculos.size(),4);
             //Chequeo lo devuelto
             AutoResponse auto = (AutoResponse) vehiculos.get(0);
             assertEquals(auto.getMarca(),"Prueba 1");
             assertEquals(auto.getModelo(),"Modelo");
             MotoResponse moto = (MotoResponse) vehiculos.get(1);
-            assertEquals(moto.getMarca(),"Prueba 111");
-            assertEquals(moto.getModelo(),"Modelo");
+            assertEquals(moto.getMarca(),"Prue11");
+            assertEquals(moto.getModelo(),"Modba 1elo");
             moto = (MotoResponse) vehiculos.get(2);
             assertEquals(moto.getMarca(),"Prueba 11");
             assertEquals(moto.getModelo(),"Modelo1");
+            moto = (MotoResponse) vehiculos.get(3);
+            assertEquals(moto.getMarca(),"Prueba 11");
+            assertEquals(moto.getModelo(),"Modelo1");
+            assertEquals(moto.getDescripcion(),"ba 1");
         } catch (ControllerException e) {
             e.printStackTrace();
         }
