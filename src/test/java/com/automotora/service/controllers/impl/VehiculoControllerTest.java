@@ -43,7 +43,8 @@ public class VehiculoControllerTest {
 
     @Before
     public void setUp() throws Exception {
-
+        //Se puede utilizar any() para representar el _todo cuando se pasa por parámetro
+        // al metodo a simular
     }
 
     /*************************************************************************/
@@ -108,9 +109,10 @@ public class VehiculoControllerTest {
             vehiculosPersistidos.remove(new KeyVehiculo(marca,modelo));
             //Mocks:
             BDDMockito.when(mockVehiculoDAO.list()).thenReturn(new ArrayList<>(vehiculosPersistidos.values()));
-            BDDMockito.when(mockVehiculoDAO.getVehiculo(marca,modelo))
+            //Uso lenient para evitar excepcion de mockito y restaurar retornos de metodos
+            BDDMockito.lenient().when(mockVehiculoDAO.getVehiculo(marca,modelo))
                     .thenReturn(Optional.ofNullable(null));
-            BDDMockito.when(mockVehiculoDAO.exists(marca,modelo))
+            BDDMockito.lenient().when(mockVehiculoDAO.exists(marca,modelo))
                     .thenReturn(false);
         } catch (DAOException e) {
             e.printStackTrace();
@@ -150,7 +152,7 @@ public class VehiculoControllerTest {
     public void getVehiculoValido() {
         try {
             agregarMoto();
-            VehiculoResponse vehiculo = controller.getVehiculo("MotoPrueba1","Modelo1");
+            VehiculoResponse vehiculo = controller.getVehiculo("MotoPrueba1","Modelo");
             assertEquals(vehiculo instanceof MotoResponse,captor.getValue() instanceof Moto);
             assertEquals(vehiculo.getMarca(),captor.getValue().getMarca());
             assertEquals(vehiculo.getModelo(),captor.getValue().getModelo());
@@ -281,7 +283,7 @@ public class VehiculoControllerTest {
             quitarVehiculoSimulado("AutoPrueba 1","Auto 1");
 
             //Ahora compruebo el tamaño de la lista retorno del controlador tras borrar
-            if (tamanioPrevio > controller.listarVehiculos().size()){
+            if (tamanioPrevio <= controller.listarVehiculos().size()){
                 fail("No se borró correctamente el elemento");
             }
         } catch (ControllerException e) {
