@@ -2,13 +2,18 @@ package com.automotora.rest.controllers;
 
 import com.automotora.service.controllers.IVehiculoController;
 import com.automotora.service.exceptions.ControllerException;
+import com.automotora.service.filter.Filter;
 import com.automotora.service.requests.AutoRequest;
 import com.automotora.service.requests.MotoRequest;
 import com.automotora.service.responses.VehiculoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.POST;
 import java.util.List;
 
@@ -18,6 +23,13 @@ public class RestVehiculoController {
 
     @Autowired
     IVehiculoController controller;
+
+    private VehiculoResponse addInfo(VehiculoResponse response){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String context = (String) request.getAttribute(Filter.CONTEXT);
+        response.setInfo(context);
+        return response;
+    }
 
     @PostMapping("agregar/auto")
     void agregarAuto(@RequestBody AutoRequest auto) throws ControllerException{
@@ -38,12 +50,14 @@ public class RestVehiculoController {
     @GetMapping("vehiculos/{marca}/{modelo}")
     VehiculoResponse getVehiculo(@PathVariable("marca") String marca ,
                                  @PathVariable("modelo") String modelo) throws ControllerException{
-        return controller.getVehiculo(marca,modelo);
+        return addInfo(controller.getVehiculo(marca,modelo));
     }
 
     @GetMapping("vehiculos")
     List<VehiculoResponse> listarVehiculos() throws ControllerException{
-        return controller.listarVehiculos();
+        List<VehiculoResponse> vehiculoResponses = controller.listarVehiculos();
+        vehiculoResponses.forEach((vehiculoResponse -> addInfo(vehiculoResponse)));
+        return vehiculoResponses;
     }
 
 }

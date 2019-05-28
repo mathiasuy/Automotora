@@ -4,6 +4,7 @@ import com.automotora.service.controllers.IVehiculoController;
 import com.automotora.service.controllers.impl.VehiculoController;
 import com.automotora.service.dataaccess.IVehiculoDAO;
 import com.automotora.service.dataaccess.impl.VehiculoDAO;
+import com.automotora.service.filter.Filter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,6 +23,12 @@ public class AutomotoraConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer.defaultContentType(MediaType.APPLICATION_JSON);
+    }
+
+
+    @Bean //Para que el atributo del contexto funcione!!!!
+    public Filter shallowEtagHeaderFilter() {
+        return new Filter();
     }
 
 }

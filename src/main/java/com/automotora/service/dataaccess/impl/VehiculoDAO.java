@@ -23,7 +23,7 @@ public class VehiculoDAO implements IVehiculoDAO {
         if (vehiculos.isEmpty()) {
             List<Vehiculo> lista_vehiculos = new ArrayList<>();
             lista_vehiculos.add(new Auto("Peugeot", "C9", 4));
-            lista_vehiculos.add(new Auto("Hinudai", "HK", 2));
+            lista_vehiculos.add(new Auto("Hyundai", "HK", 2));
             lista_vehiculos.add(new Moto("Yamaha", "Mot"));
             lista_vehiculos.add(new Moto("Yumbo", "YB"));
             lista_vehiculos.add(new Auto("Chevrolet", "CH", 4));
