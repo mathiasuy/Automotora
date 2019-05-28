@@ -11,6 +11,7 @@ public abstract class Vehiculo {
     public Vehiculo(String marca, String modelo) {
         this.modelo = modelo;
         this.marca = marca;
+        this.descripcion = "Sin descripción";
     }
 
 

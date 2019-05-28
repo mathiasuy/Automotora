@@ -19,22 +19,19 @@ public class VehiculoDAO implements IVehiculoDAO {
 
     private void initBD(){
         if (vehiculos.isEmpty()) {
-            List<Vehiculo> lista_vehiculos = new ArrayList<>();
-            lista_vehiculos.add(new Auto("Peugeot", "C9", 4){{
-                setDescripcion("Auto Peugeot");
-            }});
-            lista_vehiculos.add(new Auto("Hyundai", "HK", 2){{
-                setDescripcion("Auto Hyundai");
-            }});
-            lista_vehiculos.add(new Moto("Yamaha", "Mot"){{
-                setDescripcion("Moto Yamaha");
-            }});
-            lista_vehiculos.add(new Moto("Yumbo", "YB"){{
-                setDescripcion("Moto Yumbo");
-            }});
-            lista_vehiculos.add(new Auto("Chevrolet", "CH", 4){{
-                setDescripcion("Auto Chevrolet");
-            }});
+            List<Vehiculo> lista_vehiculos = Arrays.asList(
+                new Auto("Peugeot", "C9", 4),
+                new Moto("Yamaha", "Mot"),
+                new Auto("Hyundai", "HK", 2){{
+                    setDescripcion("Auto Hyundai");
+                }},
+                new Moto("Yumbo", "YB"){{
+                    setDescripcion("Moto Yumbo");
+                }},
+                new Auto("Chevrolet", "CH", 4){{
+                    setDescripcion("Auto Chevrolet");
+                }}
+            );
 
             lista_vehiculos.forEach(vehiculo -> {
                 vehiculos.put(new KeyVehiculo(vehiculo),vehiculo);
