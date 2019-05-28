@@ -12,5 +12,5 @@ public interface IVehiculoController {
     void borrarVehiculo(String marca, String modelo) throws ControllerException;
     VehiculoResponse getVehiculo(String marca ,String modelo) throws ControllerException;
     List<VehiculoResponse> listarVehiculos() throws ControllerException;
-
+    List<VehiculoResponse> buscarVehiculo(String criterio) throws ControllerException;
 }

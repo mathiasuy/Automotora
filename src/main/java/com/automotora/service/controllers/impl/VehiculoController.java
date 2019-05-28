@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.QueryParam;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +68,15 @@ public class VehiculoController implements IVehiculoController {
     public List<VehiculoResponse> listarVehiculos() throws ControllerException {
         List<VehiculoResponse> vehiculos = new ArrayList<>();
         vehiculoDAO.list().forEach(vehiculo->{
+            vehiculos.add(vehiculo.getResponse());
+        });
+        return  vehiculos;
+    }
+
+    @Override
+    public List<VehiculoResponse> buscarVehiculo(String criterio) throws ControllerException {
+        List<VehiculoResponse> vehiculos = new ArrayList<>();
+        vehiculoDAO.find(criterio).forEach(vehiculo->{
             vehiculos.add(vehiculo.getResponse());
         });
         return  vehiculos;

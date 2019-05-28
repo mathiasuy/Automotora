@@ -12,6 +12,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
@@ -53,6 +55,14 @@ public class RestVehiculoController {
     @GetMapping("vehiculos")
     List<VehiculoResponse> listarVehiculos() throws ControllerException{
         List<VehiculoResponse> vehiculoResponses = controller.listarVehiculos();
+        vehiculoResponses.forEach((vehiculoResponse -> addInfo(vehiculoResponse)));
+        return vehiculoResponses;
+    }
+
+    @GetMapping("vehiculo")
+    List<VehiculoResponse> buscarVehiculo(@QueryParam("q")
+                                          @NotNull String q) throws ControllerException{
+        List<VehiculoResponse> vehiculoResponses = controller.buscarVehiculo(q);
         vehiculoResponses.forEach((vehiculoResponse -> addInfo(vehiculoResponse)));
         return vehiculoResponses;
     }
