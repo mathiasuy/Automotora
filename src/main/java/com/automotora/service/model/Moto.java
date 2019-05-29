@@ -16,6 +16,14 @@ public class Moto extends Vehiculo{
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Moto)){
+            return false;
+        }
+        return super.equals(obj);
+    }
+
+    @Override
     public VehiculoResponse getResponse() {
         return new MotoResponse(getMarca(),getModelo(),getDescripcion());
     }

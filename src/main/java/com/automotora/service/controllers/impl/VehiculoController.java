@@ -34,9 +34,6 @@ public class VehiculoController implements IVehiculoController {
 
     @Override
     public VehiculoResponse getVehiculo(String marca, String modelo) throws ControllerException {
-        if (!vehiculoDAO.exists(marca,modelo)){
-            throw new ControllerException("¡El vehículo no existe!");
-        }
         return vehiculoDAO.getVehiculo(marca,modelo)
                 .orElseThrow(()-> new ControllerException("¡El vehículo no existe!")).getResponse();
     }
@@ -46,37 +43,28 @@ public class VehiculoController implements IVehiculoController {
         if (!(puertas == 4 || puertas == 2)){
             throw  new ControllerException("La cantidad de puertas no es correcta, o es 2 o es 4");
         }
-        control(marca,modelo);
         if (vehiculoDAO.exists(marca,modelo)){
-            throw new ControllerException("¡El vehículo ya existe!");
+            throw new ControllerException("Ya existe el auto");
         }
+        control(marca,modelo);
         vehiculoDAO.insert(new Auto(marca,modelo,puertas));
     }
 
     @Override
     public void modificar(Vehiculo vehiculo) throws ControllerException {
         control(vehiculo.getMarca(),vehiculo.getModelo());
-        if (!vehiculoDAO.exists(vehiculo.getMarca(),vehiculo.getModelo())){
-            throw new ControllerException("¡El vehículo no existe!");
-        }
         vehiculoDAO.update(vehiculo);
     }
 
     @Override
     public void agregarMoto(String marca, String modelo) throws ControllerException {
         control(marca, modelo);
-        if (vehiculoDAO.exists(marca,modelo)){
-            throw new ControllerException("¡El vehículo ya existe!");
-        }
         vehiculoDAO.insert(new Moto(marca, modelo));
     }
 
     @Override
     public void borrarVehiculo(String marca, String modelo) throws ControllerException {
         control(marca,modelo);
-        if (!vehiculoDAO.exists(marca,modelo)){
-            throw new ControllerException("¡El vehículo no existe!");
-        }
         vehiculoDAO.delete(marca,modelo);
     }
 

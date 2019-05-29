@@ -31,6 +31,14 @@ public class Auto extends Vehiculo{
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Auto)){
+            return false;
+        }
+        return super.equals(obj);
+    }
+
+    @Override
     public String toString() {
         return super.toString() +
                 "puertas=" + puertas +

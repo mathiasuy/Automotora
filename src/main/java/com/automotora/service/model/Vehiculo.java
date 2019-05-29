@@ -50,10 +50,7 @@ public abstract class Vehiculo {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof KeyVehiculo)){
-            return false;
-        }
-        KeyVehiculo key = (KeyVehiculo)obj;
+        Vehiculo key = (Vehiculo)obj;
         if (key.getMarca().equals(marca) && key.getModelo().equals(modelo)){
             return true;
         }

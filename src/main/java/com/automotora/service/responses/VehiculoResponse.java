@@ -39,6 +39,27 @@ public abstract class VehiculoResponse {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + getMarca().hashCode();
+        result = prime * result + getModelo().hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        VehiculoResponse ve = (VehiculoResponse)obj;
+        if (!ve.getMarca().equals(marca)){
+            return false;
+        }
+        if (!ve.getModelo().equals(modelo)){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "Vehiculo{" +
             "model='" + modelo + '\'' +

@@ -2,13 +2,10 @@ package com.automotora.service.controllers.impl;
 
 import com.automotora.service.dataaccess.IVehiculoDAO;
 import com.automotora.service.exceptions.ControllerException;
-import com.automotora.service.exceptions.DAOException;
 import com.automotora.service.model.Auto;
 import com.automotora.service.model.KeyVehiculo;
 import com.automotora.service.model.Moto;
 import com.automotora.service.model.Vehiculo;
-import com.automotora.service.responses.AutoResponse;
-import com.automotora.service.responses.MotoResponse;
 import com.automotora.service.responses.VehiculoResponse;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,10 +13,12 @@ import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 //runner de mockito que detecta las anotaciones
 @RunWith(MockitoJUnitRunner.class)
@@ -37,7 +36,7 @@ public class VehiculoControllerTest {
     @Captor
     private ArgumentCaptor<Vehiculo> captor;
 
-    private HashMap<KeyVehiculo,Vehiculo> vehiculosPersistidos = new HashMap<>();
+//    private HashMap<KeyVehiculo,Vehiculo> vehiculosPersistidos = new HashMap<>();
 
     private int cantidadAInsertar = 2;
 
@@ -46,103 +45,6 @@ public class VehiculoControllerTest {
         //Se puede utilizar any() para representar el _todo cuando se pasa por parámetro
         // al metodo a simular
     }
-
-    /*************************************************************************/
-    /********************* Métodos auxiliares ********************************/
-    /*************************************************************************/
-
-//    El problema con esta metodología es que asume que siempre se llaman a todos los metodos
-//    del DAO implicados en una operación cuando, ante un posible fallo, eso podría no ocurrir
-
-    /**
-     * Actualiza los otros métodos de la capa de datos y el map local auxiliar ante la llamada
-     * al método insert de la capa
-     * @param marca
-     * @param modelo
-     * @param puertas
-     */
-    private void agregarAutoSimulado(String marca, String modelo, int puertas){
-        agregarVehiculoSimulado(new Auto(marca, modelo, puertas));
-    }
-
-    /**
-     * Actualiza los otros métodos de la capa de datos y el map local auxiliar ante la llamada
-     * al método insert de la capa
-     * @param marca
-     * @param modelo
-     */
-    private void agregarMotoSimulada(String marca, String modelo){
-        agregarVehiculoSimulado(new Moto(marca, modelo));
-    }
-
-    /**
-     * Actualiza los otros métodos de la capa de datos y el map local auxiliar ante la llamada
-     * al método insert de la capa
-     * @param vehiculo
-     */
-    private void agregarVehiculoSimulado(Vehiculo vehiculo){
-        //También actualizo los otros métodos para obtener y listar
-        try {
-            //Esta es un control local para facilitar:
-            vehiculosPersistidos.put(new KeyVehiculo(vehiculo),vehiculo);
-            //Mocks:
-            BDDMockito.when(mockVehiculoDAO.list()).thenReturn(new ArrayList<>(vehiculosPersistidos.values()));
-
-            BDDMockito.when(mockVehiculoDAO.getVehiculo(vehiculo.getMarca(),vehiculo.getModelo()))
-                    .thenReturn(Optional.ofNullable(vehiculosPersistidos.get(vehiculo)));
-
-            BDDMockito.when(mockVehiculoDAO.exists(vehiculo.getMarca(),vehiculo.getModelo()))
-                    .thenReturn(true);
-
-        } catch (DAOException e) {
-            fail("Ocurrió una excepción indebida");
-        }
-    }
-
-    private void modificarVehiculoSimulado(Vehiculo vehiculo){
-        //También actualizo los otros métodos para obtener y listar
-//        try {
-            //Esta es un control local para facilitar:
-            Vehiculo encontrado = vehiculosPersistidos.put(new KeyVehiculo(vehiculo),vehiculo);
-            encontrado.setDescripcion(vehiculo.getDescripcion());
-            if (encontrado instanceof Auto){
-                ((Auto) encontrado).setPuertas(((Auto)vehiculo).getPuertas());
-            }
-            //Mocks:
-//            BDDMockito.when(mockVehiculoDAO.list()).thenReturn(new ArrayList<>(vehiculosPersistidos.values()));
-//            BDDMockito.when(mockVehiculoDAO.getVehiculo(vehiculo.getMarca(),vehiculo.getModelo()))
-//                    .thenReturn(Optional.ofNullable(vehiculosPersistidos.get(vehiculo)));
-//        } catch (DAOException e) {
-//            fail("Ocurrió una excepción indebida");
-//        }
-    }
-
-    /**
-     * Actualiza los otros métodos de la capa de datos y el map local auxiliar ante la llamada
-     * al método borrar de la capa
-     * @param marca
-     * @param modelo
-     */
-    private void quitarVehiculoSimulado(String marca, String modelo){
-        //También actualizo los otros métodos para obtener y listar
-        try {
-            //Esta es un control local para facilitar:
-            vehiculosPersistidos.remove(new KeyVehiculo(marca,modelo));
-            //Mocks:
-            BDDMockito.when(mockVehiculoDAO.list()).thenReturn(new ArrayList<>(vehiculosPersistidos.values()));
-            //Uso lenient para evitar excepcion de mockito y restaurar retornos de metodos
-            BDDMockito.when(mockVehiculoDAO.getVehiculo(marca,modelo))
-                    .thenReturn(Optional.ofNullable(null));
-            BDDMockito.when(mockVehiculoDAO.exists(marca,modelo))
-                    .thenReturn(false);
-        } catch (DAOException e) {
-            fail("Ocurrió una excepción indebida");
-        }
-    }
-
-    /*************************************************************************/
-    /********************** Fin métodos auxiliares ***************************/
-    /*************************************************************************/
 
     // ALTERNATIVO a la anotación: generamos un mock mediante el metodo mock
     //private IVehiculoDAO mockGenericDao = mock(IVehiculoDAO.class);
@@ -154,8 +56,11 @@ public class VehiculoControllerTest {
      */
     @Test
     public void getVehiculoInvalido() {
-        try {
-            controller.getVehiculo("MotoPrueba2","Modelo1");
+        try {            //De arriba hacia abajo
+            Moto moto = new Moto("Moto","Modelo");
+            //Indico que no existe, por si se usa el metodo exists en el controlador
+            BDDMockito.when(mockVehiculoDAO.exists(moto.getMarca(),moto.getModelo())).thenReturn(false);
+            BDDMockito.when(mockVehiculoDAO.getVehiculo(moto.getMarca(),moto.getModelo())).thenReturn(Optional.ofNullable(null));
             fail("Se obtuvo un vehículo que no existe!");
         } catch (ControllerException e) {
             if (!e.getMessage().equals("¡El vehículo no existe!")){
@@ -168,15 +73,41 @@ public class VehiculoControllerTest {
     /**
      * En este método se llama al test agregarMoto() para luego comprobar que se
      * pueda obtener ese vehículo
+     * La implementación de este test se hará de abajo hacia arriba
      */
     @Test
-    public void getVehiculoValido() {
+    public void getVehiculoValidoDAOAControlador() {
         try {
-            agregarMoto();
-            VehiculoResponse vehiculo = controller.getVehiculo("MotoPrueba1","Modelo");
-            assertEquals(vehiculo instanceof MotoResponse,captor.getValue() instanceof Moto);
-            assertEquals(vehiculo.getMarca(),captor.getValue().getMarca());
-            assertEquals(vehiculo.getModelo(),captor.getValue().getModelo());
+            Moto moto = new Moto("Moto","Modelo");
+            BDDMockito.when(mockVehiculoDAO.getVehiculo(moto.getMarca(),moto.getModelo())).thenReturn(Optional.ofNullable(moto));
+            //Asumo que existe, para eso setteo el metodo del dao en true para este objeto
+            BDDMockito.when(mockVehiculoDAO.exists(moto.getMarca(),moto.getModelo())).thenReturn(true);
+            VehiculoResponse vehiculo = controller.getVehiculo(moto.getMarca(),moto.getModelo());
+            assertEquals(vehiculo,moto.getResponse());
+        } catch (ControllerException e) {
+            fail("Ocurrió una excepción indebida");
+        }
+    }
+
+    /**
+     * La implementación de este test se hará de abajo hacia arriba
+     */
+    @Test
+    public void getVehiculoValidoControladorADAO() {
+        try {
+            String marcaString = "Moto";
+            String modeloString = "Modelo";
+            Moto moto = new Moto(marcaString,modeloString);
+            //Asumo que existe para que el caso sea feliz, no se si se usará en la
+            //implementación del controlador pero tampoco lo obligo
+            BDDMockito.when(mockVehiculoDAO.exists(marcaString,modeloString)).thenReturn(true);
+            //También ya setteo el retorno de getVehiculo en el DAO para ir de abajo hacia arriba
+            BDDMockito.when(mockVehiculoDAO.getVehiculo(marcaString,modeloString))
+                    .thenReturn(Optional.ofNullable(moto));
+            //Mando los datos al controlador
+            VehiculoResponse response = controller.getVehiculo(marcaString,modeloString);
+            //Comparo la respuesta con lo esperado
+            assertEquals(response,moto.getResponse());
         } catch (ControllerException e) {
             fail("Ocurrió una excepción indebida");
         }
@@ -186,6 +117,9 @@ public class VehiculoControllerTest {
     /**
      * Este test lo que hace es verificar que si intenté insertar un elemento desde el controlador,
      * este se insertó efectivamente en la capa DAO simulada, con los parámetros adecuados
+     *
+     * El caso de prueba simula cuando el vehículo que llega al controlador para tratar de insertarse
+     * en la base de datos, aún no existe en ella.
      *
      * Esta forma de chequeo no necesita que la capa DAO esté en funcionamiento
      * NI QUE ESTÉ IMPLEMENTADA SU INTERFAZ.
@@ -210,12 +144,16 @@ public class VehiculoControllerTest {
     @Test
     public void agregarMoto() {
         try {
-            //Notar que aca se hace en orden distinto a el método anterior, también funciona
-            controller.agregarMoto("MotoPrueba1","Modelo");
-            //El siguiente metodo actualiza el map local y los otros metodos del dao para mantener coherencia
-            agregarMotoSimulada("MotoPrueba1","Modelo");
+            Moto moto = new Moto("Moto 1", "modelo");
+            //Se prepara el panorama indicando que la moto no existe para la capa DAO
+            BDDMockito.when(mockVehiculoDAO.exists(moto.getMarca(),moto.getModelo())).thenReturn(false);
+            //Ahora se envía la moto al controlador
+            controller.agregarMoto(moto.getMarca(),moto.getModelo());
+            //Ahora capturo lo que le llegó al insert del DAO, ¿Llegará a la capa DAO?
+            // tendría que haber llegado info ya que no existía previamente un elemento con esa llave
             BDDMockito.verify(mockVehiculoDAO).insert(captor.capture());
-            assertEquals(captor.getValue().getMarca(),"MotoPrueba1");
+            //Lo compruebo
+            assertEquals(captor.getValue(),moto);
         } catch (ControllerException e) {
             fail("Ocurrió una excepción indebida");
         }
@@ -223,8 +161,7 @@ public class VehiculoControllerTest {
     }
 
     /**
-     * Otra forma que hace lo mismo que lo anterior
-     *
+     * El siguiente método es análogo al anterior pero para Autos.
      * Nota: si se indica como segundo parámetro en verify() times(0) entonces se chequeará
      * que no se ha llamado al método agregarAuto(), si se indica un valor > 0 se
      * obligará a comprobar que se realizaron varios inert y deberá ser exactamente
@@ -233,35 +170,34 @@ public class VehiculoControllerTest {
     @Test
     public void agregarAuto() {
         try {
-            controller.agregarAuto("AutoPrueba1","Modelo",2);
-            //El siguiente metodo actualiza el map local y los otros metodos del dao para mantener coherencia
-            //No debería afectar la prueba local de agregar auto si se quita
-            agregarAutoSimulado("AutoPrueba1","Modelo",2);
-            //El siguiente método captura lo que llegó al método que accede al dao,
-            // esta es la línea relevante
+            Auto auto = new Auto("AutoPrueba1","Modelo",4);
+            BDDMockito.when(mockVehiculoDAO.exists(auto.getMarca(),auto.getModelo())).thenReturn(false);
+            controller.agregarAuto(auto.getMarca(),auto.getModelo(),auto.getPuertas());
             BDDMockito.verify(mockVehiculoDAO).insert(captor.capture());
-            //Acá analizo lo capturado y lo comparo a ver si es lo mismo que llegó al controlador
-            // (o lo modificaría en base a lo requerido)
-            assertEquals(captor.getValue().getMarca(),"AutoPrueba1");
+            assertEquals(captor.getValue(),auto);
         } catch (ControllerException e) {
             fail("Ocurrió una excepción indebida");
         }
-
     }
 
     /**
-     * Este método inserta varias motos distintas
+     * Este método inserta varios vehículos distintos
      */
     @Test
     public void agregarVariosVehiculosAlternados() {
         try {
             for (int i=cantidadAInsertar; i > 0; i--){
-                if (0 == i % 2){//Vamos a insertar, para cada i, una moto cuando i sea par, sino un auto con 4 puertas
-                    controller.agregarMoto(String.format("MotoPrueba %d",i),String.format("Modelo %d",i));
-                    agregarMotoSimulada(String.format("MotoPrueba %d",i),String.format("Modelo %d",i));
+                if (0 == i % 2){
+                    //Vamos a insertar, para cada i, una moto cuando i sea par, sino un auto con 4 puertas
+                    Moto moto = new Moto(String.format("MotoPrueba %d",i),String.format("Modelo %d",i));
+                    BDDMockito.when(mockVehiculoDAO.exists(moto.getMarca(),moto.getModelo())).thenReturn(false);
+                    controller.agregarMoto(moto.getMarca(),moto.getModelo());
+                    BDDMockito.when(mockVehiculoDAO.exists(moto.getMarca(),moto.getModelo())).thenReturn(true);
                 }else{
-                    controller.agregarAuto(String.format("AutoPrueba %d",i),String.format("Auto %d",i),4);
-                    agregarAutoSimulado(String.format("AutoPrueba %d",i),String.format("Auto %d",i),4);
+                    Auto auto = new Auto(String.format("AutoPrueba %d",i),String.format("Auto %d",i),4);
+                    BDDMockito.when(mockVehiculoDAO.exists(auto.getMarca(),auto.getModelo())).thenReturn(false);
+                    controller.agregarAuto(auto.getMarca(),auto.getModelo(),auto.getPuertas());
+                    BDDMockito.when(mockVehiculoDAO.exists(auto.getMarca(),auto.getModelo())).thenReturn(true);
                 }
             }
             //Ahora chequeo uno por uno que hayan llegado correctamente a la capa de datos.
@@ -284,8 +220,6 @@ public class VehiculoControllerTest {
                     assertEquals(insertados.get(i).getMarca(), String.format("AutoPrueba %d", i));
                     assertEquals(((Auto)insertados.get(i)).getPuertas(), 4);
                 }
-                //Ya los agrego a la lista simulada
-                agregarVehiculoSimulado(insertados.get(cantidadAInsertar));
             }
         } catch (ControllerException e) {
             fail("Ocurrió una excepción indebida");
@@ -299,22 +233,19 @@ public class VehiculoControllerTest {
     @Test
     public void borrarVehiculo() {
         try {
-            agregarVariosVehiculosAlternados();
-            //Me fijo que la lista que retorna el controlador contiene el vehículo
-            if (
-                    !controller.listarVehiculos().get(1).getMarca().equals("AutoPrueba 1") &&
-                    controller.listarVehiculos().get(1).getModelo().equals("Auto 1")
-            ){
-                fail("No se encontró el vehículo a borrar");
-            }
-            int tamanioPrevio = controller.listarVehiculos().size();
-            
-            controller.borrarVehiculo("AutoPrueba 1","Auto 1");
-            BDDMockito.verify(mockVehiculoDAO).delete(captor.getValue().getMarca(),captor.getValue().getModelo());
-
-            //la línea de abajo es en la que se comprueba lo que se pide en este test
-            assertEquals(captor.getValue().getMarca(), "AutoPrueba 1");
-            assertEquals(captor.getValue().getModelo(), "Auto 1");
+            String marcaDeLaVictima = "Peugeot";
+            String modeloDeLaVictima = "C12";
+            ArgumentCaptor<String> marca = ArgumentCaptor.forClass(String.class);
+            ArgumentCaptor<String> modelo = ArgumentCaptor.forClass(String.class);
+            //El vehiculo debe existir para que el caso sea feliz
+            BDDMockito.when(mockVehiculoDAO.exists(marcaDeLaVictima,modeloDeLaVictima)).thenReturn(true);
+            //Prueba de arriba hacia abajo, envìo al controlador
+            controller.borrarVehiculo(marcaDeLaVictima,modeloDeLaVictima);
+            //Capturo lo que le llegò al DAO
+            BDDMockito.verify(mockVehiculoDAO).delete(marca.capture(),modelo.capture());
+            //la línea de abajo es en la que se comprueba lo que se pide en este test con lo que le llegò al dao
+            assertEquals(marca.getValue(),marcaDeLaVictima);
+            assertEquals(modelo.getValue(),modeloDeLaVictima);
         } catch (ControllerException e) {
             fail("Ocurrió una excepción indebida");
         }
@@ -323,26 +254,21 @@ public class VehiculoControllerTest {
     @Test
     public void listarVehiculos() {
         try {
-            agregarVariosVehiculosAlternados();
-            List<VehiculoResponse> vehiculos = controller.listarVehiculos();
-            //Primero chequeo que las cantidades sean las mismas para ante falla, no recurrir al loop
-            //que es más costoso
-            assertEquals(vehiculos.size(),captor.getAllValues().size());
-            //Ahora uno por uno
-            for (int i=0; i<cantidadAInsertar;i++){
-                VehiculoResponse vehiculoResponse = vehiculos.get(i);
-                Vehiculo vehiculo = captor.getAllValues().get(i);
-                if (vehiculoResponse instanceof MotoResponse) {
-                    assertEquals(vehiculoResponse instanceof MotoResponse, vehiculo instanceof Moto);
-                    assertEquals(vehiculoResponse.getMarca(), vehiculo.getMarca());
-                    assertEquals(vehiculoResponse.getModelo(), vehiculo.getModelo());
-                }else{
-                    assertEquals(vehiculoResponse instanceof AutoResponse, vehiculo instanceof Auto);
-                    assertEquals(vehiculoResponse.getMarca(), vehiculo.getMarca());
-                    assertEquals(vehiculoResponse.getModelo(), vehiculo.getModelo());
-                    assertEquals(((AutoResponse)vehiculoResponse).getPuertas(), ((Auto)vehiculo).getPuertas());
-                }
+            Vehiculo[] vehiculos = {
+                    new Auto("Prueba 1", "Modelo", 2),
+                    new Moto("Prue11", "Modba 1elo"),
+                    new Moto("Prueba 12", "Modelo1"),
+                    new Moto("Prueba 11", "Modelo1"){{
+                        setDescripcion("ba 1");
+                    }}
+            };
+            VehiculoResponse[] salidaEsperada = new VehiculoResponse[vehiculos.length];
+            for (int i = 0; i < vehiculos.length; i++) {
+                salidaEsperada[i] = vehiculos[i].getResponse();
             }
+            BDDMockito.when(mockVehiculoDAO.list()).thenReturn(Arrays.asList(vehiculos));
+            List<VehiculoResponse> vehiculosResponse = controller.listarVehiculos();
+            assertArrayEquals(vehiculosResponse.toArray(),salidaEsperada);
         } catch (ControllerException e) {
             fail("Ocurrió una excepción indebida");
         }
@@ -351,20 +277,17 @@ public class VehiculoControllerTest {
     @Test
     public void modificar(){
         try {
-            agregarVariosVehiculosAlternados();
-            Vehiculo vehiculo = new Auto("AutoPrueba 1","Auto 1",4){{
+           Vehiculo vehiculo = new Auto("AutoPrueba 1","Auto 1",4){{
                 setDescripcion("Descripción modificada");
             }};
-//            BDDMockito.when(mockVehiculoDAO.exists("AutoPrueba 1", "Auto 1")).thenReturn(true);
+           //Indico que el vehiculo existe, ya que este es un caso feliz :).
+            BDDMockito.when(mockVehiculoDAO.exists(vehiculo.getMarca(), vehiculo.getModelo())).thenReturn(true);
+            //Mando al contorlador
             controller.modificar(vehiculo);
-            modificarVehiculoSimulado(vehiculo);
+            //Capturo lo que llega al dao
             Mockito.verify(mockVehiculoDAO).update(captor.capture());
-            assertEquals(captor.getValue().getMarca(),vehiculo.getMarca());
-            assertEquals(captor.getValue().getDescripcion(),vehiculo.getDescripcion());
-            assertEquals(captor.getValue().getModelo(),vehiculo.getModelo());
-            if (captor.getValue() instanceof Auto == vehiculo instanceof Auto){
-                assertEquals(((Auto)captor.getValue()).getPuertas(),((Auto) vehiculo).getPuertas());
-            }
+            //Compruebo
+            assertEquals(captor.getValue(),vehiculo);
         } catch (ControllerException e) {
             fail("Ocurrió una excepción indebida");
         }
@@ -381,41 +304,27 @@ public class VehiculoControllerTest {
      * no es tarea del controlador el filtrado, por lo tanto la parte de filtrado de
      * el test de filtrado no aplica para esta capa. Solo se comprueba el pasaje al response
      *
-     * Esta prueba vendría a ser como un Bottom Up (desde la capa de datos hasta la vista) a
-     * diferencia de las anteriores
      */
     @Test
     public void filtrado(){
         try {
-            agregarVariosVehiculosAlternados();
-            BDDMockito.when(mockVehiculoDAO.find("ba 1"))
-                    .thenReturn(Arrays.asList(
-                            new Auto("Prueba 1", "Modelo", 2),
-                            new Moto("Prue11", "Modba 1elo"),
-                            new Moto("Prueba 11", "Modelo1"),
-                            new Moto("Prueba 11", "Modelo1"){{
-                                setDescripcion("ba 1");
-                            }}
-                    ));
-            List<VehiculoResponse> vehiculos = controller.buscarVehiculo("ba 1");
-            //Chequeo la cantidad devuelta
-
-
-            assertEquals(vehiculos.size(),4);
+            Vehiculo[] vehiculos = {
+                new Auto("Prueba 1", "Modelo", 2),
+                new Moto("Prue11", "Modba 1elo"),
+                new Moto("Prueba 12", "Modelo1"),
+                new Moto("Prueba 11", "Modelo1"){{
+                    setDescripcion("ba 1");
+                }}
+            };
+            BDDMockito.when(mockVehiculoDAO.find("ba 1")).thenReturn(Arrays.asList(vehiculos));
+            VehiculoResponse[] salidaEsperada = new VehiculoResponse[vehiculos.length];
+            for (int i = 0; i < vehiculos.length; i++) {
+                salidaEsperada[i] = vehiculos[i].getResponse();
+            }
+            //Mando al controlador una busqueda (la capa dao es la encargada de la busqueda)
+            List<VehiculoResponse> encontrados = controller.buscarVehiculo("ba 1");
             //Chequeo lo devuelto
-            AutoResponse auto = (AutoResponse) vehiculos.get(0);
-            assertEquals(auto.getMarca(),"Prueba 1");
-            assertEquals(auto.getModelo(),"Modelo");
-            MotoResponse moto = (MotoResponse) vehiculos.get(1);
-            assertEquals(moto.getMarca(),"Prue11");
-            assertEquals(moto.getModelo(),"Modba 1elo");
-            moto = (MotoResponse) vehiculos.get(2);
-            assertEquals(moto.getMarca(),"Prueba 11");
-            assertEquals(moto.getModelo(),"Modelo1");
-            moto = (MotoResponse) vehiculos.get(3);
-            assertEquals(moto.getMarca(),"Prueba 11");
-            assertEquals(moto.getModelo(),"Modelo1");
-            assertEquals(moto.getDescripcion(),"ba 1");
+            assertArrayEquals(encontrados.toArray(),salidaEsperada);
         } catch (ControllerException e) {
             fail("Ocurrió una excepción indebida");
         }

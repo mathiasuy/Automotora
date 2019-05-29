@@ -7,6 +7,14 @@ public class MotoResponse extends VehiculoResponse {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof MotoResponse)){
+            return false;
+        }
+        return super.equals(obj);
+    }
+
+    @Override
     public String toString() {
         return super.toString()
                 + "} Moto.";

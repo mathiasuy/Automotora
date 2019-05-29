@@ -2,6 +2,7 @@ package com.automotora.service.dataaccess.impl;
 
 import com.automotora.service.dataaccess.IVehiculoDAO;
 import com.automotora.service.exceptions.DAOException;
+import com.automotora.service.exceptions.DuplicateEntryException;
 import com.automotora.service.model.Auto;
 import com.automotora.service.model.KeyVehiculo;
 import com.automotora.service.model.Moto;
@@ -48,6 +49,9 @@ public class VehiculoDAO implements IVehiculoDAO {
     @Override
     public void insert(Vehiculo vehiculo) throws DAOException {
         initBD();
+        if (exists(vehiculo.getMarca(),vehiculo.getModelo())){
+            throw new DuplicateEntryException("Ya existe el vehìculo");
+        }
         vehiculos.put(new KeyVehiculo(vehiculo),vehiculo);
     }
 
@@ -78,9 +82,6 @@ public class VehiculoDAO implements IVehiculoDAO {
     @Override
     public Optional<Vehiculo> getVehiculo(String marca, String modelo) throws DAOException {
         initBD();
-        if (!exists(marca,modelo)){
-            throw new DAOException("No existe el vehiculo");
-        }
         return Optional.ofNullable(vehiculos.get(new KeyVehiculo(marca,modelo)));
     }
 
