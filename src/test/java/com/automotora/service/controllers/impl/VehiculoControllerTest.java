@@ -50,8 +50,6 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)//runner de mockito que detecta las anotaciones
 public class VehiculoControllerTest {
 
-    private HashMap<KeyVehiculo,Vehiculo> vehiculos = new HashMap<>();
-
     // generamos un mock con anotaciones
     // ALTERNATIVO a la anotación: generamos un mock mediante el metodo mock
     //private IVehiculoDAO mockGenericDao = mock(IVehiculoDAO.class);
@@ -63,8 +61,6 @@ public class VehiculoControllerTest {
 
     @Captor
     private ArgumentCaptor<Vehiculo> captor;
-
-    private int cantidadAInsertar = 2;
 
     @Before
     public void setUp() throws Exception {
@@ -202,6 +198,7 @@ public class VehiculoControllerTest {
     @Test
     public void agregarVariosVehiculosAlternados() {
         try {
+            int cantidadAInsertar = 20;
             for (int i=cantidadAInsertar; i > 0; i--){
                 if (0 == i % 2){
                     //Vamos a insertar, para cada i, una moto cuando i sea par, sino un auto con 4 puertas
