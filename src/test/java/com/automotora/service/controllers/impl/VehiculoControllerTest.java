@@ -63,7 +63,7 @@ public class VehiculoControllerTest {
     private ArgumentCaptor<Vehiculo> captor;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         //En este método se coloca _todo lo que se desee que se ejecute antes de cada método @Test
         //Otras opciónes: @BeforeEach, @BeforeClass (para métodos estáticos), etc...
 
