@@ -20,13 +20,41 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-//runner de mockito que detecta las anotaciones
-@RunWith(MockitoJUnitRunner.class)
+/**
+ * @author Mathias Battistella - Magenta Innova
+ *
+ * Esta forma de chequeo no necesita que la capa DAO esté en funcionamiento
+ * NI QUE ESTÉ IMPLEMENTADA SU INTERFAZ.
+ *
+ * Tampoco se precisa preparación alguna de los metodos para insertar.
+ *
+ * El método verify() no presta atención a los datos que ya pueda haber en la capa DAO si esta contiene
+ * algo previo al test.
+ *
+ * Es necesario haber invocado al menos una vez al método queverifica verify()
+ * (el metodo agregar del controlador)
+ *
+ * Para que funcione correctamente el controlador se debe indicar con la anotación @InjectMock
+ * y la capa a simular con @Mock
+ *
+ * Se utiliza la variable con anotación @Captor para que mockito la inicialice. Esta sirve para
+ * poder indicar qué tipo de objeto se pasa por parámetro en una función de insertado y captarlo
+ * cuando en el flujo se vaya a insertar algo usando la función del verify(captor). Luego se puede
+ * usar captor.getValue() para obtener el objeto que se pasó por parámetro durante el flujo del test.
+ *
+ * Mockito no permite que se setteen métodos del dao que luego no se usan, en caso de querer forzar se puede
+ * usar BDDMockito.lenient().when...
+ *
+ */
+
+@RunWith(MockitoJUnitRunner.class)//runner de mockito que detecta las anotaciones
 public class VehiculoControllerTest {
 
     private HashMap<KeyVehiculo,Vehiculo> vehiculos = new HashMap<>();
 
     // generamos un mock con anotaciones
+    // ALTERNATIVO a la anotación: generamos un mock mediante el metodo mock
+    //private IVehiculoDAO mockGenericDao = mock(IVehiculoDAO.class);
     @Mock
     private IVehiculoDAO mockVehiculoDAO;
 
@@ -36,18 +64,25 @@ public class VehiculoControllerTest {
     @Captor
     private ArgumentCaptor<Vehiculo> captor;
 
-//    private HashMap<KeyVehiculo,Vehiculo> vehiculosPersistidos = new HashMap<>();
-
     private int cantidadAInsertar = 2;
 
     @Before
     public void setUp() throws Exception {
+        //En este método se coloca _todo lo que se desee que se ejecute antes de cada método @Test
+        //Otras opciónes: @BeforeEach, @BeforeClass (para métodos estáticos), etc...
+
         //Se puede utilizar any() para representar el _todo cuando se pasa por parámetro
         // al metodo a simular
-    }
 
-    // ALTERNATIVO a la anotación: generamos un mock mediante el metodo mock
-    //private IVehiculoDAO mockGenericDao = mock(IVehiculoDAO.class);
+        //En caso de haber variables parametrizadas en los métodos del controlador, se puede
+        //usar: ReflectionTestUtils.setField(controlAccesoService, "largoUsuario", 15);
+
+        //si mockito no inicializa, se puede usar:
+        //MockitoAnnotations.initMocks(this); para forzar la inicialización
+
+        //Se puede usar List mockWithLogger = BDDMockito.mock(List.class, BDDMockito.withSettings().verboseLogging());
+        //Para el logger de mockito
+    }
 
     /**
      * En este método se chequea si se devuelve algo cuando se solicita un objeto inexistente
@@ -120,25 +155,6 @@ public class VehiculoControllerTest {
      *
      * El caso de prueba simula cuando el vehículo que llega al controlador para tratar de insertarse
      * en la base de datos, aún no existe en ella.
-     *
-     * Esta forma de chequeo no necesita que la capa DAO esté en funcionamiento
-     * NI QUE ESTÉ IMPLEMENTADA SU INTERFAZ.
-     *
-     * Tampoco se precisa preparación alguna de los metodos para insertar.
-     *
-     * El método verify() no presta atención a los datos que ya pueda haber en la capa DAO si esta contiene
-     * algo previo al test.
-     *
-     * Es necesario haber invocado al menos una vez al método queverifica verify()
-     * (el metodo agregar del controlador)
-     *
-     * Para que funcione correctamente el controlador se debe indicar con la anotación @InjectMock
-     * y la capa a simular con @Mock
-     *
-     * Se utiliza la variable con anotación @Captor para poder indicar qué tipo de
-     * objeto se pasa por parámetro en una función de insertado y captarlo cuando en el flujo se vaya a
-     * insertar algo usando la función del verify(captor). Luego se puede usar captor.getValue()
-     * para obtener el objeto que se pasó por parámetro durante el flujo del test.
      *
      */
     @Test
