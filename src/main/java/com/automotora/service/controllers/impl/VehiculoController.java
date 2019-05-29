@@ -9,6 +9,7 @@ import com.automotora.service.model.Vehiculo;
 import com.automotora.service.responses.VehiculoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,16 +19,28 @@ import java.util.List;
 @Service
 public class VehiculoController implements IVehiculoController {
 
+    @Value("${varchar.modelo.largo}")
+    private int largoModelo;
+
+    @Value("${varchar.marca.largo}")
+    private int largoMarca;
+
+    @Value("${mensajes.varchar.modelo.largo.fail}")
+    private String msjLargoModeloFail;
+
+    @Value("${mensajes.varchar.marca.largo.fail}")
+    private String msjLargoMarcaFail;
+
     @Autowired
     @Qualifier("vehiculo")
     private IVehiculoDAO vehiculoDAO;
 
     private boolean control(String marca, String modelo) throws ControllerException {
-        if (modelo.length() > 20){
-            throw new ControllerException("El largo del nombre del model excede el límite");
+        if (modelo.length() > largoModelo){
+            throw new ControllerException(msjLargoModeloFail);
         }
-        if (marca.length() > 15){
-            throw new ControllerException("El largo del nombre de la marca excede el límite permitido");
+        if (marca.length() > largoMarca){
+            throw new ControllerException(msjLargoMarcaFail);
         }
         return true;
     }

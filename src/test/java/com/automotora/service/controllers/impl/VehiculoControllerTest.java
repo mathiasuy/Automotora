@@ -92,6 +92,7 @@ public class VehiculoControllerTest {
             //Indico que no existe, por si se usa el metodo exists en el controlador
             BDDMockito.when(mockVehiculoDAO.exists(moto.getMarca(),moto.getModelo())).thenReturn(false);
             BDDMockito.when(mockVehiculoDAO.getVehiculo(moto.getMarca(),moto.getModelo())).thenReturn(Optional.ofNullable(null));
+            controller.getVehiculo(moto.getMarca(),moto.getModelo());
             fail("Se obtuvo un vehículo que no existe!");
         } catch (ControllerException e) {
             if (!e.getMessage().equals("¡El vehículo no existe!")){
