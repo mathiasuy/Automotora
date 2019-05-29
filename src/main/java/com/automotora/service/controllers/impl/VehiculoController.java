@@ -16,14 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Service
+@Service("controlador")
 public class VehiculoController implements IVehiculoController {
 
     @Value("${varchar.modelo.largo}")
-    private int largoModelo;
+    private Integer largoModelo;
 
     @Value("${varchar.marca.largo}")
-    private int largoMarca;
+    private Integer largoMarca;
 
     @Value("${mensajes.varchar.modelo.largo.fail}")
     private String msjLargoModeloFail;

@@ -1,9 +1,9 @@
 package com.automotora.service.controllers.impl;
 
+import com.automotora.rest.config.AutomotoraConfiguration;
 import com.automotora.service.dataaccess.IVehiculoDAO;
 import com.automotora.service.exceptions.ControllerException;
 import com.automotora.service.model.Auto;
-import com.automotora.service.model.KeyVehiculo;
 import com.automotora.service.model.Moto;
 import com.automotora.service.model.Vehiculo;
 import com.automotora.service.responses.VehiculoResponse;
@@ -11,10 +11,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,8 +51,16 @@ import static org.junit.Assert.*;
  *
  */
 
-@RunWith(MockitoJUnitRunner.class)//runner de mockito que detecta las anotaciones
+@RunWith(SpringRunner.class)//runner de mockito que detecta las anotaciones
+@SpringBootTest(classes = AutomotoraConfiguration.class)
 public class VehiculoControllerTest {
+
+
+    @Value("${varchar.marca.largo}")
+    private int largoMarca;
+
+    @Value("${mensajes.varchar.modelo.largo.fail}")
+    private String msjLargoModeloFail;
 
     // generamos un mock con anotaciones
     // ALTERNATIVO a la anotación: generamos un mock mediante el metodo mock
@@ -59,11 +71,22 @@ public class VehiculoControllerTest {
     @InjectMocks
     private VehiculoController controller;
 
+    @Autowired
+    private Environment environment;
+
     @Captor
     private ArgumentCaptor<Vehiculo> captor;
 
     @Before
     public void setUp() {
+        //Se settean todas las propiedades para el controlador antes de ejecutar cada método.
+        ReflectionTestUtils.setField(controller, "largoModelo", Integer.valueOf(environment.getProperty("varchar.marca.largo")));
+        ReflectionTestUtils.setField(controller, "largoMarca", Integer.valueOf(environment.getProperty("varchar.modelo.largo")));
+        ReflectionTestUtils.setField(controller, "msjLargoModeloFail", environment.getProperty("mensajes.varchar.modelo.largo.fail"));
+        ReflectionTestUtils.setField(controller, "msjLargoMarcaFail", environment.getProperty("mensajes.varchar.marca.largo.fail"));
+
+        //when(myProperty.get()).thenReturn("my property value");
+//        MockitoAnnotations.initMocks(controller);// para forzar la inicialización
         //En este método se coloca _todo lo que se desee que se ejecute antes de cada método @Test
         //Otras opciónes: @BeforeEach, @BeforeClass (para métodos estáticos), etc...
 
