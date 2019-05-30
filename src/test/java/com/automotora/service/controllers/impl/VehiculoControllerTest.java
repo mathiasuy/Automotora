@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -51,16 +52,12 @@ import static org.junit.Assert.*;
  *
  */
 
-@RunWith(SpringRunner.class)//runner de mockito que detecta las anotaciones
+
 @SpringBootTest(classes = AutomotoraConfiguration.class)
+@RunWith(SpringRunner.class)//runner de mockito que detecta las anotaciones
+@TestPropertySource(locations = "classpath:test.properties")
 public class VehiculoControllerTest {
 
-
-    @Value("${varchar.marca.largo}")
-    private int largoMarca;
-
-    @Value("${mensajes.varchar.modelo.largo.fail}")
-    private String msjLargoModeloFail;
 
     // generamos un mock con anotaciones
     // ALTERNATIVO a la anotación: generamos un mock mediante el metodo mock
@@ -71,15 +68,14 @@ public class VehiculoControllerTest {
     @InjectMocks
     private VehiculoController controller;
 
-    @Autowired
-    private Environment environment;
-
     @Captor
     private ArgumentCaptor<Vehiculo> captor;
 
+    @Autowired
+    private Environment environment;
+
     @Before
     public void setUp() {
-        //Se settean todas las propiedades para el controlador antes de ejecutar cada método.
         ReflectionTestUtils.setField(controller, "largoModelo", Integer.valueOf(environment.getProperty("varchar.marca.largo")));
         ReflectionTestUtils.setField(controller, "largoMarca", Integer.valueOf(environment.getProperty("varchar.modelo.largo")));
         ReflectionTestUtils.setField(controller, "msjLargoModeloFail", environment.getProperty("mensajes.varchar.modelo.largo.fail"));

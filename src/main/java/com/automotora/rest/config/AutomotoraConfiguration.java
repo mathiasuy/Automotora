@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan({"com.automotora.service.*","com.automotora.service.dataaccess.impl"})
-//@Import({RestSBCommonsConfiguration.class})
 public class AutomotoraConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
@@ -25,11 +24,6 @@ public class AutomotoraConfiguration extends WebMvcConfigurerAdapter {
     @Bean //Para que el atributo del contexto funcione!!!!
     public Filter shallowEtagHeaderFilter() {
         return new Filter();
-    }
-
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertiesResolver() {
-        return new PropertySourcesPlaceholderConfigurer();
     }
 
 }
