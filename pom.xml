@@ -56,6 +56,7 @@
 			    <artifactId>spring-boot-maven-plugin</artifactId>
 		   	    <version>2.2.5.RELEASE</version>
 			    <configuration>
+            			<mainClass>com.automotora.rest.AutomotoraApplication</mainClass>				    
 				<release>${java.version}</release>  <!-- same as <java.version> -->
 				<target>${java.version}</target>    <!-- same as <java.version> -->
 			    </configuration>			
