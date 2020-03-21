@@ -8,12 +8,22 @@
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 
-	<properties>
-	    <java.version>1.8</java.version>
-	    <maven.compiler.source>${java.version}</maven.compiler.source>
-	    <maven.compiler.target>${java.version}</maven.compiler.target>
-   	    <maven.compiler.release>${java.version}</maven.compiler.release>
-	</properties>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.10.RELEASE</version>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <swagger-core-version>1.5.9</swagger-core-version>
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <buildDirectory>target</buildDirectory>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>        
+    </properties>
 
 	<dependencies>
 		<dependency>
@@ -50,25 +60,19 @@
 	</dependencies>
 
 	<build>
-		<plugins>
-			<plugin>
-			    <groupId>org.springframework.boot</groupId>
-			    <artifactId>spring-boot-maven-plugin</artifactId>
-		   	    <version>2.2.5.RELEASE</version>
-			    <configuration>
-            			<mainClass>com.automotora.rest.AutomotoraApplication</mainClass>				    
-				<release>${java.version}</release>  <!-- same as <java.version> -->
-				<target>${java.version}</target>    <!-- same as <java.version> -->
-			    </configuration>			
-			    <executions>
-				<execution>
-				    <goals>
-					<goal>repackage</goal>
-				    </goals>
-				</execution>
-			    </executions>
-			</plugin>
-		</plugins>
+        <finalName>${project.artifactId}</finalName>
+        <directory>${buildDirectory}</directory>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.10.0</version>
+            </plugin>
+        </plugins>
 	</build>
 
 </project>
