@@ -9,10 +9,10 @@
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
-	    <java.version>11</java.version>
+	    <java.version>1.8</java.version>
 	    <maven.compiler.source>${java.version}</maven.compiler.source>
 	    <maven.compiler.target>${java.version}</maven.compiler.target>
-   	    <maven.compiler.release>1.8</maven.compiler.release>
+   	    <maven.compiler.release>${java.version}</maven.compiler.release>
 	</properties>
 
 	<dependencies>
@@ -56,8 +56,8 @@
 			    <artifactId>spring-boot-maven-plugin</artifactId>
 		   	    <version>2.2.5.RELEASE</version>
 			    <configuration>
-				<release>1.8</release>  <!-- same as <java.version> -->
-				<target>1.8</target>    <!-- same as <java.version> -->
+				<release>${java.version}</release>  <!-- same as <java.version> -->
+				<target>${java.version}</target>    <!-- same as <java.version> -->
 			    </configuration>			
 			    <executions>
 				<execution>
