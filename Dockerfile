@@ -1,11 +1,6 @@
-FROM java:8
-WORKDIR /
+FROM openjdk:8-jdk-alpine
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
 ARG JAR_FILE=target/demo.jar
-COPY ${JAR_FILE} appp.jar
-ADD ${JAR_FILE} ${JAR_FILE}
-EXPOSE 8080
-CMD java - jar ${JAR_FILE}
-
-
-
-
+COPY ${JAR_FILE} app1.jar
+CMD ["java -jar","/app1.jar"]
