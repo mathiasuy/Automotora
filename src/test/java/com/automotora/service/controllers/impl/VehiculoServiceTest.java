@@ -117,8 +117,8 @@ public class VehiculoServiceTest {
 
     /**
      * En este mÃ©todo se llama al test agregarMoto() para luego comprobar que se
-     * pueda obtener ese vehÃ­culo
-     * La implementaciÃ³n de este test se harÃ¡ de abajo hacia arriba
+     * pueda obtener ese vehiculo
+     * La implementaciÃ³n de este test se hara de abajo hacia arriba
      * @throws ControllerException 
      */
     @Test
