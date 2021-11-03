@@ -8,26 +8,47 @@
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 	
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.1.RELEASE</version>
+	</parent>
+	
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <swagger-core-version>1.5.9</swagger-core-version>
-        <maven.deploy.skip>true</maven.deploy.skip>
-        <buildDirectory>target</buildDirectory>
-	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>        
-
+		<!-- JAVA/MAVEN -->
+        <java.version>11</java.version>
 	    <maven.compiler.source>${java.version}</maven.compiler.source>
 	    <maven.compiler.target>${java.version}</maven.compiler.target>
    	    <maven.compiler.release>${java.version}</maven.compiler.release>	    
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+		<!-- SONAR -->
+	    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+	    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+	    <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+	    <sonar.language>java</sonar.language>
+	    <jacoco.version>0.8.6</jacoco.version>
+	    
+	    
+	    <!-- SWAGGER -->
+        <swagger-core-version>1.5.9</swagger-core-version>
+        <maven.deploy.skip>true</maven.deploy.skip>
+
+		<!-- BUILD PROPS -->
+        <buildDirectory>target</buildDirectory>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+	    
+		<!-- SPRING CLOUD -->
+		<spring-cloud.version>Edgware.SR2</spring-cloud.version>
     </properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
-			<version>RELEASE</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
@@ -38,7 +59,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
@@ -48,12 +68,48 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>RELEASE</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-test</artifactId>
+<!-- 		    <scope>test</scope> -->
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+		   <groupId>org.projectlombok</groupId>
+		   <artifactId>lombok</artifactId>
+		   <scope>provided</scope>
+		</dependency>		
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<version>RELEASE</version>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -64,20 +120,16 @@
 			<plugin>
 			    <groupId>org.springframework.boot</groupId>
 			    <artifactId>spring-boot-maven-plugin</artifactId>
-		   	    <version>2.2.5.RELEASE</version>
 			    <configuration>
 				<release>${java.version}</release>  <!-- same as <java.version> -->
 				<target>${java.version}</target>    <!-- same as <java.version> -->
 				 <archive>
 				    <manifest>
-
 				    <!-- give full qualified name of your main class-->
-				      <mainClass>com.automotora.rest.AutomotoraApplication</mainClass>				    
-
+				      <mainClass>com.automotora.rest.AutomotoraApplication</mainClass>
 				    </manifest>
 				  </archive>				    
-			    </configuration>	
-				
+			    </configuration>
 			    <executions>
 				<execution>
 				    <goals>
@@ -85,6 +137,26 @@
 				    </goals>
 				</execution>
 			    </executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${org.mapstruct.version}</version>
+						</path>
+	                    <path>
+	                        <groupId>org.projectlombok</groupId>
+	                        <artifactId>lombok</artifactId>
+    						<version>${lombok.version}</version>
+	                    </path>                         
+					</annotationProcessorPaths>
+				</configuration>
 			</plugin>		
 		</plugins>
 	</build>
