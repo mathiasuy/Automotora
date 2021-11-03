@@ -1,4 +1,4 @@
-package com.automotora.model;
+package com.mathiasuy.automotora.model;
 
 
 import javax.persistence.Column;

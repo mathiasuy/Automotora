@@ -1,4 +1,4 @@
-package com.automotora.exceptions;
+package com.mathiasuy.automotora.exceptions;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.automotora.responses.ErrorMessageResponse;
+import com.mathiasuy.automotora.responses.ErrorMessageResponse;
 
 
 @Order(Ordered.HIGHEST_PRECEDENCE)

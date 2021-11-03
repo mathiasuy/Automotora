@@ -1,7 +1,6 @@
-package com.automotora.model;
+package com.mathiasuy.automotora.model;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -9,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.slf4j.MDC;
@@ -18,7 +16,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.automotora.utils.Constants;
+import com.mathiasuy.automotora.utils.Constants;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -56,7 +54,7 @@ public abstract class Auditable<U> {
 	@Column(name = "lastModifiedBy", nullable = false)
 	private U lastModifiedBy;
 
-	@Column(name = "correlationId", nullable = false)
+	@Column(name = "correlationId")
 	private String correlationId;
 
 	protected Auditable() {

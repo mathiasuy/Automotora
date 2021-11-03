@@ -1,4 +1,4 @@
-package com.automotora.exceptions;
+package com.mathiasuy.automotora.exceptions;
 
 import org.slf4j.Logger;
 

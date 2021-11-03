@@ -1,4 +1,4 @@
-package com.automotora.exceptions;
+package com.mathiasuy.automotora.exceptions;
 
 public enum ErrorType {
 

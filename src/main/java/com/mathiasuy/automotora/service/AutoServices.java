@@ -1,4 +1,4 @@
-package com.automotora.service;
+package com.mathiasuy.automotora.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,14 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.automotora.dataaccess.IAutoDataAccess;
-import com.automotora.exceptions.ErrorType;
-import com.automotora.exceptions.NotAllowedException;
-import com.automotora.exceptions.NotFoundException;
-import com.automotora.model.Auto;
-import com.automotora.requests.AutoRequest;
-import com.automotora.responses.AutoResponse;
-import com.automotora.utils.Constants;
+import com.mathiasuy.automotora.dataaccess.IAutoDataAccess;
+import com.mathiasuy.automotora.exceptions.ErrorType;
+import com.mathiasuy.automotora.exceptions.NotAllowedException;
+import com.mathiasuy.automotora.exceptions.NotFoundException;
+import com.mathiasuy.automotora.model.Auto;
+import com.mathiasuy.automotora.requests.AutoRequest;
+import com.mathiasuy.automotora.responses.AutoResponse;
+import com.mathiasuy.automotora.utils.Constants;
 
 
 @Service

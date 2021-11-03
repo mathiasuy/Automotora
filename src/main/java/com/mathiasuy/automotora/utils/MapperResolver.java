@@ -1,10 +1,10 @@
-package com.automotora.utils;
+package com.mathiasuy.automotora.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.automotora.dataaccess.IAutoDataAccess;
+import com.mathiasuy.automotora.dataaccess.IAutoDataAccess;
 
 @org.springframework.stereotype.Component
 public class MapperResolver {

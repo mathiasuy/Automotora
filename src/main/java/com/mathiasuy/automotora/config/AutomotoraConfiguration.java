@@ -1,4 +1,4 @@
-package com.automotora.config;
+package com.mathiasuy.automotora.config;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -8,11 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.http.MediaType;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.automotora.filters.Filter;
+import com.mathiasuy.automotora.filters.Filter;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -26,7 +23,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2	
 @EnableAutoConfiguration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
-public class AutomotoraConfiguration extends WebMvcConfigurerAdapter {
+public class AutomotoraConfiguration {
 
 	
 	@Bean
@@ -47,22 +44,13 @@ public class AutomotoraConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public AuditorAware<String> auditorProvider() {
-
-        /*
-          if you are using spring security, you can get the currently logged username with following code segment.
-          SecurityContextHolder.getContext().getAuthentication().getName()
-         */
+    	//Usuario en curso, para spring security usar SecurityContextHolder.getContext().getAuthentication().getName()
         return () -> Optional.ofNullable("ANONYMOUS");
     }
     
-    @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.defaultContentType(MediaType.APPLICATION_JSON);
-    }
-
-
-    @Bean //Para que el atributo del contexto funcione!!!!
+    @Bean 
     public Filter shallowEtagHeaderFilter() {
+    	//Para que el atributo del contexto funcione!!!!
         return new Filter();
     }
 

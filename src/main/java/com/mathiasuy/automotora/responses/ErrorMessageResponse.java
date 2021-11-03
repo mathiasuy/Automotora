@@ -1,8 +1,8 @@
-package com.automotora.responses;
+package com.mathiasuy.automotora.responses;
 
 import java.time.LocalDateTime;
 
-import com.automotora.exceptions.ErrorType;
+import com.mathiasuy.automotora.exceptions.ErrorType;
 
 import lombok.Getter;
 import lombok.Setter;

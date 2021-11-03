@@ -1,10 +1,10 @@
-package com.automotora.service;
+package com.mathiasuy.automotora.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.automotora.utils.IMapper;
+import com.mathiasuy.automotora.utils.IMapper;
 
 public abstract class CrudServices<Response, Request, Id> {
 		

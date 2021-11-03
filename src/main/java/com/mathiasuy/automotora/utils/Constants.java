@@ -1,4 +1,4 @@
-package com.automotora.utils;
+package com.mathiasuy.automotora.utils;
 
 public interface Constants {
 

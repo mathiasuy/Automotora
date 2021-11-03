@@ -1,4 +1,4 @@
-package com.automotora.model;
+package com.mathiasuy.automotora.model;
 
 
 import javax.persistence.Entity;
@@ -20,14 +20,14 @@ import lombok.ToString;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = true)
-public class User extends Auditable<String>{
+public class Usuario extends Auditable<String>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;   
-    private String name;
+    private String nombre;
     private String email;
-    private String country;
+    private String pais;
     private String website;
 
 }

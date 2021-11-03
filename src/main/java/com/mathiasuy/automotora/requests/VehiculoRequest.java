@@ -1,4 +1,4 @@
-package com.automotora.requests;
+package com.mathiasuy.automotora.requests;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

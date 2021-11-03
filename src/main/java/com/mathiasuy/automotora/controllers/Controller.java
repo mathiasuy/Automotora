@@ -1,4 +1,4 @@
-package com.automotora.controllers;
+package com.mathiasuy.automotora.controllers;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.automotora.service.CrudServices;
+import com.mathiasuy.automotora.service.CrudServices;
 
 public abstract class Controller<Response, Request, Id> {
 

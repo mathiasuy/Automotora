@@ -121,12 +121,11 @@
 			    <groupId>org.springframework.boot</groupId>
 			    <artifactId>spring-boot-maven-plugin</artifactId>
 			    <configuration>
-				<release>${java.version}</release>  <!-- same as <java.version> -->
-				<target>${java.version}</target>    <!-- same as <java.version> -->
+				<release>${java.version}</release> 
+				<target>${java.version}</target>  
 				 <archive>
 				    <manifest>
-				    <!-- give full qualified name of your main class-->
-				      <mainClass>com.automotora.rest.AutomotoraApplication</mainClass>
+				      <mainClass>com.mathiasuy.automotora.AutomotoraApplication</mainClass>
 				    </manifest>
 				  </archive>				    
 			    </configuration>
