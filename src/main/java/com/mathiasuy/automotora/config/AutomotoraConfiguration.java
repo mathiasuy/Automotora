@@ -29,12 +29,12 @@ public class AutomotoraConfiguration {
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.automotora.controllers"))
+				.apis(RequestHandlerSelectors.basePackage("com.mathiasuy.automotora.controllers"))
 				.paths(PathSelectors.any()).build().apiInfo(getApiInfo());
 	}
 	
 	private ApiInfo getApiInfo() {
-		return new ApiInfo("API Automotora", "API Automotora", "1.0",
+		return new ApiInfo("API Automotoras", "API Automotoras", "1.0",
 				"http://mathias.uy/",
 				new Contact("Mathias Battistella",
 						"mathias.uy",
