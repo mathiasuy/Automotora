@@ -15,13 +15,13 @@
 	</parent>
 	
 
-<--	<repositories> -->
-<--          <repository>  -->
-<--              <id>nexus-mathiasuy</id>  -->
-<--              <name>demos</name>  -->
-<--              <url>http://192.168.1.10:8081/nexus/content/repositories/mathiasuy</url>  -->
-<--          </repository>  -->
-<-- 	</repositories> -->
+<!--	<repositories> -->
+<!--          <repository>  -->
+<!--              <id>nexus-mathiasuy</id>  -->
+<!--              <name>demos</name>  -->
+<!--              <url>http://192.168.1.10:8081/nexus/content/repositories/mathiasuy</url>  -->
+<!--          </repository>  -->
+<!-- 	</repositories> -->
 	
 	<dependencyManagement>
 		<dependencies>
