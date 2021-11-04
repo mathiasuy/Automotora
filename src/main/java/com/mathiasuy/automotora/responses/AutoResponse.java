@@ -11,6 +11,5 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class AutoResponse extends VehiculoResponse{
     private int puertas;
-
-
+    
 }

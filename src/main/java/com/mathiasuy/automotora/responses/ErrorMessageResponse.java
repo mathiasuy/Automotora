@@ -17,7 +17,7 @@ public class ErrorMessageResponse {
 	private String userMessage;
 	private ErrorType errorType;
 	private LocalDateTime date;
-	
+		
 	public ErrorMessageResponse() {
 		this.setDate(LocalDateTime.now());
 	}

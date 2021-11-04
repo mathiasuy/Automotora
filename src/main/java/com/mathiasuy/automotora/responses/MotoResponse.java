@@ -11,4 +11,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class MotoResponse extends VehiculoResponse {
 
+
+	
 }

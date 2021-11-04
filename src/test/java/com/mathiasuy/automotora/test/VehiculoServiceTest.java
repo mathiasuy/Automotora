@@ -69,7 +69,6 @@ public class VehiculoServiceTest {
     			.contentType("application/json")
     			.content(objectMapper.writeValueAsString(FactoryObjects.generateAutoRequest1())))
     	.andExpect(status().isCreated());    	
-    	this.autoDataAccess.saveAndFlush(FactoryObjects.generateAuto1());
     }    
     
     @After
@@ -79,10 +78,10 @@ public class VehiculoServiceTest {
     
     @Test
     public void test() {
-    	List<AutoResponse> autos = autoServices.findAll();
+    	AutoResponse autoResponseCreated = autoServices.add(FactoryObjects.generateAutoRequest1());
     	AutoResponse autoResponse = iMapper.toResponse(FactoryObjects.generateAuto1());
-    	autoResponse.setId(Long.valueOf(1));
-    	assertEquals(autos.get(0), autoResponse); 
+    	autoResponse.setId(autoResponseCreated.getId());
+    	assertEquals(autoResponseCreated, autoResponse); 
     }
     
 }

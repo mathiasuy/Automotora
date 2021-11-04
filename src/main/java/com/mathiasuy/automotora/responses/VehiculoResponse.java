@@ -14,4 +14,5 @@ public abstract class VehiculoResponse {
     private String marca;
     private String modelo;
     private String descripcion;
+
 }
